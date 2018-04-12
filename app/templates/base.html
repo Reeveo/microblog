@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% if title %}
+	<title>{{title}} - Microblog</title>
+	{% else %}
+	<title>Welcome to Microblog</title>
+	{% endif %}
+
+</head>
+	
+<body>
+	<div>
+		Microblog: 
+		<a href="/index">Home</a>
+		<a href="/login">Login</a>
+	</div>
+	<hr>
+	
+	{% with messages = get_flashed_messages() %}
+	<!-- https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iii-web-forms 
+		halfway down the page after inserting this, jsut before improving field validation-->
+
+	{% if messages %}
+	<ul>
+		{% for message in messages %}
+		<li>
+			{{message}}
+		</li>
+		{% endfor %}
+	</ul>
+	
+		{% endif %} 
+		{% endwith %}
+	
+
+	{% block content %} {% endblock %}
+</body>
+</html>
