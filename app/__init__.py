@@ -7,9 +7,14 @@ from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config.from_object(Config)
+# Initialise the database
 db = SQLAlchemy(app)
-nigrate = Migrate(app, db)
+migrate = Migrate(app, db)
+
+# Initialises the flask login 
 login = LoginManager(app)
+
+# this is needed to prevent access to pages if not logged in
 login.login_view = 'login'
 
 from app import routes, models
