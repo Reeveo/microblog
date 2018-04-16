@@ -2,6 +2,7 @@ from datetime import datetime
 from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from hashlib import md5
 
     '''
     Table for Users, ID is the primary key and is linked to the posts table as a foreign key (Post.User_id) 
@@ -28,6 +29,15 @@ class User(Usermixin, db.Model):
         #Function to check if the password is correct, boolean where true is returned if it is correct.
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+        # Obtain a avatar picture from Gravatar (wordpress company). This needs the email to be in lower case to work
+        # d = deault icon to use
+        #s = size e.g. 80 == 80 pixels
+    def avatar(self, size):
+        digest = md5(self.email.lower().encode("utf-8")).hexdigest()
+        return "https://www.gravatar.com/avatar/{}?d=identicon&s={}".format(digest, size)
+    
+    
     
     # Datetime is used to timestampe when the post is created which allows for filtering etc. UTC specifically to avoid time conflicts
     #Set up the Post table
