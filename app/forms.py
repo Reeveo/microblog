@@ -17,6 +17,13 @@ class RegistrationForm(FlaskForm):
 	password2 = PasswordField("Repeat Password", validators=[DataRequired(), EqualTo("password")])
 	submit = SubmitField("Register")
 	
+	'''
+	When you add any methods that match the pattern validate_<field_name>, 
+	WTForms takes those as custom validators and invokes them in addition to the stock validators.
+	The below validators check to see if the username or email is present in the database,
+	if it is then it will return a ValidationError.
+	'''
+	
 	def validate_username(self, username):
 		user = User.query.filter_by(username = username.data).first()
 		if user is not None:
