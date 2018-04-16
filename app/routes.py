@@ -12,6 +12,11 @@ from werkzeug.urls import url_parse
 def index():
 	return render_template("index.html", title = "Home Page", post = Post)
 
+	'''
+	@login_required decorator will intercept the request and respond with a redirect to /login, 
+	but it will add a query string argument to this URL, making the complete redirect URL /login?next=/index.
+	the request.args attribute exposes the contents of the query string in a friendly dictionary format
+	'''
 @app.route("/login", methods=["GET", "POST"])	
 def login():
 	if current_user.is_authenticated:
