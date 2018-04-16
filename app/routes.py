@@ -10,7 +10,7 @@ from werkzeug.urls import url_parse
 @app.route("/index")
 @login_required
 def index():
-	return render_template("index.html", title = "Home Page", post = Post)
+	return render_template("index.html", title = "Home Page", posts = posts)
 
 	'''
 	@login_required decorator will intercept the request and respond with a redirect to /login, 
