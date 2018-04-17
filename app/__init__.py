@@ -17,5 +17,6 @@ login = LoginManager(app)
 # this is needed to prevent access to pages if not logged in. It tells Flask-Login what the view function is which handles logins (url_for page)
 login.login_view = 'login'
 
-from app import routes, models
+#Need to import the below to get them registered with Flask
+from app import routes, models, errors
 
