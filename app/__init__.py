@@ -3,7 +3,8 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
-# logging package writes logs and this is used to send error reports to the admin email
+# logging package writes logs and this is used to
+# send error reports to the admin email
 import logging
 from logging.handlers import SMTPHandler
 
@@ -13,14 +14,12 @@ app.config.from_object(Config)
 # Initialise the database
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
 # Initialises the flask login 
 login = LoginManager(app)
-
-# this is needed to prevent access to pages if not logged in. It tells Flask-Login what the view function is which handles logins (url_for page)
+# this is needed to prevent access to pages if not logged in. 
+# It tells Flask-Login what the view function is which handles logins (url_for page)
 login.login_view = 'login'
-
-#Need to import the below to get them registered with Flask
+# Need to import the below to get them registered with Flask
 from app import routes, models, errors
 
 if not app.debug:
@@ -31,10 +30,6 @@ if not app.debug:
         secure = None
         if app.config["MAIL_USE_TLS"]:
             secure()
-        mail_handler = SMTPHandler(
-            mailhost=(app.config["MAIL_SERVER"], app.config["MAIL_PORT"])
-            fromaddr="no-reply@" + app.config["MAIL_SERVER"]
-            toaddrs= app.config["ADMINS"], subject="Microblog Failure",
-            credentials= auth, secure=secure)
+        mail_handler = SMTPHandler(mailhost=(app.config["MAIL_SERVER"], app.config["MAIL_PORT"]),fromaddr="no-reply@" + app.config["MAIL_SERVER"], toaddrs= app.config["ADMINS"], subject="Microblog Failure", credentials= auth, secure=secure)
         mail_handler.setLevel(logging.ERROR)
         app.logger.addHandler(mail_handler)

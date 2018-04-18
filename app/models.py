@@ -4,20 +4,20 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
 
-    '''
-    Table for Users, ID is the primary key and is linked to the posts table as a foreign key (Post.User_id) 
-    Parameters, state integer or string, db.String is variable length and not fixed
-    http://docs.sqlalchemy.org/en/latest/orm/extensions/declarative/table_config.html
-    Usermixin implements the generic implementations - is_authenticated, is_active, is_anonymous, get_id()
-    '''
+'''
+Table for Users, ID is the primary key and is linked to the posts table as a foreign key (Post.User_id) 
+Parameters, state integer or string, db.String is variable length and not fixed
+http://docs.sqlalchemy.org/en/latest/orm/extensions/declarative/table_config.html
+Usermixin implements the generic implementations - is_authenticated, is_active, is_anonymous, get_id()
+'''
     #Set up the User table
-class User(Usermixin, db.Model):
+class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     about_me = db.Column(db.String(140))
-    last_seen = db.Column(db.datetime, default=datetime.utcnow)
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
     posts = db.relationship('Post', backref='author', lazy='dynamic')
 
         # This repr allows you to use flask shell to print the username - also used below for posts
@@ -53,6 +53,6 @@ class Post(db.Model):
     def __repr__(self):
         return '<Post {}>'.format(self.body)
 
-@login.user.loader
+@login.user_loader
 def load_user(id):
     return User.query.get(int(id))
