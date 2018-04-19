@@ -6,19 +6,35 @@ from app.models import User, Post
 from werkzeug.urls import url_parse
 from datetime import datetime
 
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.utcnow()
+        db.session.commit()
+
 
 @app.route("/")
 @app.route("/index")
 @login_required
 def index():
-	return render_template("index.html", title = "Home Page", posts = posts)
+	posts = [
+		{
+            'author': {'username': 'John'},
+            'body': 'Beautiful day in Portland!'
+        },
+        {
+            'author': {'username': 'Susan'},
+			'body': 'The Avengers movie was so cool!'
+		}
+	]
+	return render_template("index.html", title= "Home Page", posts= posts)
 
 '''
-@login_required decorator will intercept the request and respond with a redirect to /login, 
+@login_required decorator will intercept the request and respond with a redirect to /login,
 but it will add a query string argument to this URL, making the complete redirect URL /login?next=/index.
 the request.args attribute exposes the contents of the query string in a friendly dictionary format
 '''
-@app.route("/login", methods=["GET", "POST"])	
+@app.route("/login", methods=["GET", "POST"])
 def login():
 	if current_user.is_authenticated:
 		return redirect(url_for('index'))
@@ -33,7 +49,7 @@ def login():
 		if not next_page or url_parse(next_page).netloc != '':
 			next_page = url_for('index')
 		return redirect(next_page)
-	return render_template("login.html", title = "Sign in", form= form)
+	return render_template("login.html", title="Sign in", form=form)
 
 @app.route("/logout")
 def logout():
@@ -65,11 +81,7 @@ def user(username):
 	]
 	return render_template("user.html", user=user, posts=posts)
 
-@app.before_request
-def before_request():
-    if current_user.is_authenticated:
-        current_user.last_seen = datetime.utcnow()
-        db.session.commit()
+
 
 @app.route("/edit_profile/", methods=["GET", "POST"])
 @login_required
