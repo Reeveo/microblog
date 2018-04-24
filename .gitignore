@@ -4,3 +4,4 @@ venv
 migrations
 app.db
 .gitignore
+logs
