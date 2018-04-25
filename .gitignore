@@ -4,3 +4,5 @@ venv
 migrations
 app.db
 .gitignore
+logs
+logs/microblog.log
