@@ -5,5 +5,4 @@ migrations
 app.db
 .gitignore
 logs
-app.db
 logs/microblog.log
