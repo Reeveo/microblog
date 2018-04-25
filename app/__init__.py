@@ -22,8 +22,7 @@ login = LoginManager(app)
 # It tells Flask-Login what the view function is which handles logins (url_for page)
 login.login_view = 'login'
 # Need to import the below to get them registered with Flask
-from app import routes, models, errors
-mail= Mail(app)
+mail = Mail(app)
 
 if not app.debug:
     if app.config["MAIL_SERVER"]:
@@ -44,3 +43,5 @@ if not app.debug:
     app.logger.addHandler(file_handler)
     app.logger.setLevel(logging.INFO)
     app.logger.info("Microblog startup")
+
+from app import routes, models, errors
