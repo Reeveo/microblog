@@ -76,7 +76,7 @@ class User(UserMixin, db.Model):
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
     # Generate the password reset token
-    def get_reset_password_token(self, expires_in=600)
+    def get_reset_password_token(self, expires_in=600):
         return jwt.encode(
             {"reset password": self.id, "exp":time() + expires_in},
             app.config["SECRET_KEY"], algorithm="HS256").decode("utf-8")
