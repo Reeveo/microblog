@@ -3,6 +3,7 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
+from flask_mail import Mail
 # logging package writes logs and this is used to
 # send error reports to the admin email
 import logging
@@ -22,6 +23,7 @@ login = LoginManager(app)
 login.login_view = 'login'
 # Need to import the below to get them registered with Flask
 from app import routes, models, errors
+mail= Mail(app)
 
 if not app.debug:
     if app.config["MAIL_SERVER"]:

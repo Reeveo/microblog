@@ -1,8 +1,11 @@
 from datetime import datetime
-from app import db, login
+from app import db, login, app
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
+from time import time
+import jwt
+
 
 followers = db.Table(
     'followers',
@@ -72,8 +75,20 @@ class User(UserMixin, db.Model):
                 followers.c.follower_id == self.id)
         own = Post.query.filter_by(user_id=self.id)
         return followed.union(own).order_by(Post.timestamp.desc())
+    # Generate the password reset token
+    def get_reset_password_token(self, expires_in=600)
+        return jwt.encode(
+            {"reset password": self.id, "exp":time() + expires_in},
+            app.config["SECRET_KEY"], algorithm="HS256").decode("utf-8")
+    @staticmethod
+    def verify_reset_password_token(token):
+        try:
+            id= jwt.decode(token, app.config["SECRET_KEY"],
+                            algorithms=["HS256"])["reset password"]
+        except:
+            return
+        return User.query.get(id)
 
-        
     # Datetime is used to timestampe when the post is created which allows for filtering etc. UTC specifically to avoid time conflicts
     #Set up the Post table
 class Post(db.Model):
